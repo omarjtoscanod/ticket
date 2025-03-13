@@ -1,0 +1,88 @@
+# 🚀 Tickets API - Documentación Completa
+
+API para gestión de tickets con **Spring Boot 3.4.3**, **Docker**, **Swagger** y **H2 Database**.  
+Incluye CRUD, paginación, validaciones y documentación interactiva.
+
+---
+
+## 📥 Requisitos
+- Docker ([Descargar](https://www.docker.com/get-started))
+- Java 17 (opcional, solo para desarrollo sin Docker)
+
+---
+
+## 🐳 Ejecución con Docker
+
+### 1. Construir y ejecutar
+```bash
+docker build -t tickets-api . && docker run -p 8080:8080 tickets-api
+```
+### 2. Construir y ejecutar
+```bash
+docker stop $(docker ps -q --filter ancestor=tickets-api)
+```
+
+## 🔍 Acceso a Recursos Clave
+
+| Recurso                  | URL                                  |
+|--------------------------|--------------------------------------|
+| **Documentación Swagger** | http://localhost:8080/swagger-ui.html |
+| **Consola H2 (BD)**      | http://localhost:8080/h2-console     |
+| **Endpoint Principal**   | http://localhost:8080/api/tickets    |
+
+**Credenciales H2:**  
+- **JDBC URL:** `jdbc:h2:mem:ticketsdb`  
+- **Usuario:** `sa`  
+- **Contraseña:** (vacío)
+
+## 🛠️ Ejemplos de Consumo de Endpoints
+
+### 1. Crear un ticket
+```bash
+curl -X POST "http://localhost:8080/api/tickets" \
+-H "Content-Type: application/json" \
+-d '{"usuario": "juan", "estatus": "ABIERTO"}'
+```
+
+### 2. Buscar tickets paginados
+```bash
+curl -X GET "http://localhost:8080/api/tickets?usuario=juan&page=0&size=5"
+```
+
+### 3. Actualizar un ticket
+```bash
+curl -X PUT "http://localhost:8080/api/tickets/1" \
+-H "Content-Type: application/json" \
+-d '{"usuario": "juan_actualizado", "estatus": "CERRADO"}'
+```
+
+### 4. Eliminar un ticket
+```bash
+curl -X DELETE "http://localhost:8080/api/tickets/1"
+```
+
+## 📄 Ejemplo de Respuestas
+
+### Respuesta exitosa (201 Created)
+```bash
+{
+  "id": 1,
+  "usuario": "juan",
+  "estatus": "ABIERTO",
+  "fechaCreacion": "2024-01-01T12:00:00",
+  "fechaActualizacion": "2024-01-01T12:00:00"
+}
+```
+### Error de validación (400 Bad Request)
+```bash
+{
+  "usuario": "El usuario es obligatorio",
+  "estatus": "El estado es obligatorio"
+}
+```
+
+## 📌 Notas
+
+- **Datos en memoria:** Los datos se pierden al reiniciar el contenedor.  
+- **Desarrollo local:** Ejecuta `./gradlew bootRun` si no usas Docker.  
+- **Soporte:** Revisa la documentación en [Swagger UI](http://localhost:8080/swagger-ui.html).
